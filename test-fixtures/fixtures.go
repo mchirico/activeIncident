@@ -130,10 +130,62 @@ body content
 </body>
 </html>`
 
+
+
+var detail = `<html>
+<head>
+<title>Montgomery County PA Public Safety - Fire and EMS Comments</title>
+<META http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta http-equiv="refresh" content="120">
+<META name="description" content="Display of Active Fire, Emergency Medical and Traffic Incidents">
+<META name="keywords" content="County of Montgomery Pa  Department of Public Safety, Incidents On-Line, Active Fire EMS Traffic Incidents">
+<META name="created" content="June 2, 2009">
+<META name="ROBOTS" content="ALL">
+<META name="revisit-after" content="15">
+<META http-equiv="Pragma" content="no-cache">
+<META http-equiv="Pragma" content="MON 23 Oct 2000 01:00:00 GMT">
+<META name="expiry" content="never">
+<META http-equiv="Content-Style-Type" content="text/css">
+<script language="javascript" type="text/javascript">
+function closeWindow() {
+window.open('','_parent','');
+window.close();
+}
+</script>
+<style>
+A:link {text-decoration: underline; color:"black";}
+A:visited {text-decoration: underline; color:"black";}
+A:hover {text-decoration: underline; color:"red";}
+.table-container
+{
+	width: 100%;
+	overflow-y: auto;
+	_overflow: auto;
+	margin: 0 0 1em;
+}
+</style>
+ 
+</head>
+<body marginheight="0" marginwidth="0" leftmargin="2" topmargin="0" link="#000000" bgcolor="#cfcecd">
+<h4><font color="#800000" face="Verdana">County of Montgomery, PA<br>
+Department of Public Safety</font><font face="Arial, Helvetica, sans-serif"><br>
+<br>
+</font><font face="Verdana" color="#800000">Fire &amp; EMS Incident Status Comments</font></h4>
+<font face='Arial, Helvetica, sans-serif' size='2'>Last Updated 7/5/2019 4:45:23 PM&nbsp;&nbsp;screen will refresh every 2 minutes</font><br><br><font face=verdana size=2><b>Event Comments for Incident No. &nbsp;E1941113</b><br><font face=verdana size=1>UNKNOWN MEDICAL EMERGENCY&nbsp;&nbsp;&nbsp;&nbsp;<br><font face=verdana size=1>OUTER LINE DR & JOSEPH PLUMB MARTIN LOOP TRL&nbsp;&nbsp;&nbsp;Municipality:&nbsp;UPPER MERION<br><div class='table-container'><table border='1' cellspacing='0' cellpadding='1' width='600' class='info'><tr><td width='15%'><b><font face='Arial,Helvetica,sans-serif' size='1'>Date/Time Entered</font></b></td><td width='15%'><b><font face='Arial,Helvetica,sans-serif' size='1'>Unit</font></b></td><td width='60%'><b><font face='Arial,Helvetica,sans-serif' size='1'>Status</font></b></td></font></tr><tr><td><font face='Arial,Helvetica,sans-serif' size='1'>2019-07-05<br>16:40:52</font></td><td><font face='Arial,Helvetica,sans-serif' size='1'>356-4</font></td><td><font face='Arial,Helvetica,sans-serif' size='1'>Dispatched</font></td></tr><tr><td><font face='Arial,Helvetica,sans-serif' size='1'>2019-07-05<br>16:40:52</font></td><td><font face='Arial,Helvetica,sans-serif' size='1'>QX56</font></td><td><font face='Arial,Helvetica,sans-serif' size='1'>Dispatched</font></td></tr></table></div><br><font face='Arial,Helvetica,sans-serif' size='2'><a href="javascript:void(0);" onclick="window.print(); return false;">Print this page</a><br>
+<a target="_blank" href="http://www.montcopa.org/837">
+List of Standards and Abbreviations</a><br>
+<a href="javascript:closeWindow();">Close</font></p></A>
+</body>
+</html>
+`
 func Page() string {
 	return page
 }
 
 func Table() string {
 	return table
+}
+
+func Detail() string {
+	return detail
 }

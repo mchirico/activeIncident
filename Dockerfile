@@ -16,5 +16,5 @@ FROM alpine:latest
 RUN apk --no-cache add ca-certificates
 COPY --from=build /bin/project /bin/project
 ENTRYPOINT ["/bin/project"]
-CMD ["--help"]
+# CMD ["--help"]
 
