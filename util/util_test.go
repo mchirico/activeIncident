@@ -16,7 +16,7 @@ import (
 	"testing"
 )
 
-func TestBeging(t *testing.T) {
+func TestBegin(t *testing.T) {
 	s := test_fixtures.Page()
 	doc, err := html.Parse(strings.NewReader(s))
 	if err != nil {
@@ -103,4 +103,16 @@ func TestGetBuildDB(t *testing.T) {
 	}
 
 
+}
+
+func TestShow(t *testing.T) {
+	Show()
+}
+
+func TestGetTableV2(t *testing.T) {
+
+	a,_ := GetTableV2(test_fixtures.Detail())
+	for _,v :=range a {
+		fmt.Printf("%v\n",v)
+	}
 }

@@ -188,6 +188,44 @@ func GetTable(s string) ([]string, error) {
 	return r, nil
 }
 
+func GetTableV2(s string) ([]string, error) {
+	doc, err := html.Parse(strings.NewReader(s))
+	r := []string{}
+
+	if err != nil {
+		return r, err
+	}
+	var f func(*html.Node)
+
+	f = func(n *html.Node) {
+		if n.Type == html.ElementNode && n.Data == "table" {
+
+		}
+		for c := n.FirstChild; c != nil; c = c.NextSibling {
+
+			if c.Data == "td" {
+
+				if c.FirstChild.Data == "b" {
+					//c = c.FirstChild
+					return
+				}
+
+				if c.FirstChild.Data == "font" {
+					r = append(r, c.FirstChild.FirstChild.Data)
+				} else {
+					r = append(r, c.FirstChild.Data)
+				}
+
+			}
+
+			f(c)
+		}
+	}
+	f(doc)
+
+	return r, nil
+}
+
 
 
 func BuildDb() ([]map[string]string,[][]string,error) {
