@@ -3,6 +3,8 @@ package util
 import (
 	"errors"
 	"fmt"
+	"log"
+
 	"golang.org/x/net/html"
 	"io/ioutil"
 	"net/http"
@@ -78,11 +80,21 @@ func Get(url string) (string, error) {
 	return GetWithClient(url, client)
 }
 
-func Tag(s string) ([]string, error) {
+
+type DB struct {
+	r map[string]string
+	v []string
+}
+
+
+
+
+func Tag(s string) ([]string, []string, error) {
 	doc, err := html.Parse(strings.NewReader(s))
 	r := []string{}
+	l := []string{}
 	if err != nil {
-		return r, err
+		return r, l, err
 	}
 	var f func(*html.Node)
 	f = func(n *html.Node) {
@@ -93,6 +105,8 @@ func Tag(s string) ([]string, error) {
 					if strings.Contains(a.Val, "map.asp?type=") {
 						// fmt.Println(a.Val)
 						r = append(r, a.Val)
+					} else if strings.Contains(a.Val, "livecad") {
+						l = append(l, a.Val)
 					}
 
 					break
@@ -104,18 +118,18 @@ func Tag(s string) ([]string, error) {
 		}
 	}
 	f(doc)
-	return r, err
+	return r, l, err
 }
 
 func strip(s string) map[string]string {
 
-	fmt.Printf("%v\n", s)
+	//fmt.Printf("%v\n", s)
 	m := map[string]string{}
 	s = cleanUp(s)
 	for _, v := range strings.Split(s, "&") {
 		ss := strings.Split(v, "=")
 		if len(ss) == 2 {
-			fmt.Printf("M: %s, %s\n", ss[0], ss[1])
+			//fmt.Printf("M: %s, %s\n", ss[0], ss[1])
 			m[ss[0]] = ss[1]
 		}
 
@@ -124,9 +138,106 @@ func strip(s string) map[string]string {
 }
 
 func cleanUp(s string) string {
-	s = strings.Replace(s, "livecadcomments-fireems.asp?eid", "eid",-1)
-	s = strings.Replace(s, "map.asp?type", "type",-1)
-	s = strings.Replace(s, "<br>", " ",-1)
-	s = strings.Replace(s, " @ ", " ",-1)
+	s = strings.Replace(s, "livecadcomments-fireems.asp?eid", "eid", -1)
+	s = strings.Replace(s, "map.asp?type", "type", -1)
+	s = strings.Replace(s, "<br>", " ", -1)
+	s = strings.Replace(s, " @ ", " ", -1)
 	return s
+}
+
+func GetDetail(purl string) string {
+	url := "https://webapp02.montcopa.org/eoc/cadinfo/" + purl
+	return strings.Replace(url, " ", "%20", -1)
+}
+
+func GetTable(s string) ([]string, error) {
+	doc, err := html.Parse(strings.NewReader(s))
+	r := []string{}
+
+	if err != nil {
+		return r, err
+	}
+	var f func(*html.Node)
+
+	f = func(n *html.Node) {
+		if n.Type == html.ElementNode && n.Data == "table" {
+
+		}
+		for c := n.FirstChild; c != nil; c = c.NextSibling {
+
+			if c.Data == "td" {
+
+				if c.FirstChild.Data == "b" {
+					//c = c.FirstChild
+					return
+				}
+
+				if c.FirstChild.Data == "font" {
+					r = append(r, c.FirstChild.FirstChild.Data)
+				} else {
+					r = append(r, c.FirstChild.Data)
+				}
+
+			}
+
+			f(c)
+		}
+	}
+	f(doc)
+
+	return r, nil
+}
+
+
+
+func BuildDb() ([]map[string]string,[][]string,error) {
+
+	callTable :=[]map[string]string{}
+	arriveTable := [][]string{}
+
+	url := "https://webapp02.montcopa.org/eoc/cadinfo/livecad.asp"
+	r, err := Get(url)
+	if err != nil {
+		return nil,nil,err
+	}
+
+	result, link, err := Tag(r)
+	if err != nil {
+		return nil,nil,err
+	}
+
+	for _,result  :=range result {
+		callTable = append(callTable,strip(result))
+	}
+
+
+	for _, l := range link {
+		r, err = Get(GetDetail(l))
+		if err != nil {
+			return callTable,nil,err
+		}
+
+		arrive, err := GetTable(r)
+		if err != nil {
+			return callTable,nil,err
+		}
+		arriveTable = append(arriveTable,arrive)
+
+	}
+
+	return callTable, arriveTable,err
+
+}
+
+func Show() {
+	c,a,err := BuildDb()
+	if err != nil {
+		log.Fatalf("No build")
+	}
+	for i,m := range c {
+		for k,v := range m {
+			fmt.Printf("%v: %v\n",k,v)
+		}
+		fmt.Printf("Status: %v\n\n",a[i])
+	}
 }

@@ -36,13 +36,22 @@ func TestBeging(t *testing.T) {
 func TestTag(t *testing.T) {
 	defer util.NewTlib().ConstructDir()()
 
-	result, err := Tag(test_fixtures.Page())
+	result, _, err := Tag(test_fixtures.Page())
 	if err != nil {
 		t.FailNow()
 	}
 
 	strip(result[0])
 
+}
+
+func TestGetTable(t *testing.T) {
+	r := test_fixtures.Table()
+	result, err := GetTable(r)
+	if err != nil {
+		t.FailNow()
+	}
+	fmt.Printf("%v\n", result)
 }
 
 func Test_LiveCheck(t *testing.T) {
@@ -53,11 +62,39 @@ func Test_LiveCheck(t *testing.T) {
 		t.Fatalf("err: %s\n", err)
 	}
 
-	result, err := Tag(r)
+	result, link, err := Tag(r)
 	if err != nil {
 		t.FailNow()
 	}
 
 	strip(result[0])
+
+	for _, l := range link {
+		r, err = Get(GetDetail(l))
+		if err != nil {
+			t.Fatalf("err: %s\n", err)
+		}
+
+		result, err = GetTable(r)
+		fmt.Printf("%v\n", result)
+
+	}
+
+}
+
+
+func TestGetBuildDB(t *testing.T) {
+
+	c,a,err := BuildDb()
+	if err != nil {
+		t.FailNow()
+	}
+	for i,m := range c {
+		for k,v := range m {
+			fmt.Printf("%v: %v\n",k,v)
+		}
+		fmt.Printf("Status: %v\n\n",a[i])
+	}
+
 
 }

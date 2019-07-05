@@ -22,6 +22,7 @@ package cmd
 
 import (
 	"fmt"
+	"github.com/mchirico/activeIncident/util"
 	"os"
 
 	homedir "github.com/mitchellh/go-homedir"
@@ -43,13 +44,18 @@ This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
 	// Uncomment the following line if your bare application
 	// has an action associated with it:
-	//	Run: func(cmd *cobra.Command, args []string) { },
+	RunE: func(cmd *cobra.Command, args []string) error {
+
+		util.Show()
+		return nil
+	},
 }
 
 // Execute adds all child commands to the root command and sets flags appropriately.
 // This is called by main.main(). It only needs to happen once to the rootCmd.
 func Execute() {
 	if err := rootCmd.Execute(); err != nil {
+		fmt.Printf("... okay here..")
 		fmt.Println(err)
 		os.Exit(1)
 	}

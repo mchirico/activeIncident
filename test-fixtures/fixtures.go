@@ -98,6 +98,42 @@ Department of Public Safety Home Page</a></font>
 </html>
 `
 
+var table = `<!DOCTYPE html>
+<html>
+<head>
+<title></title>
+</head>
+<body>
+body content
+<p>more content</p>
+
+
+<table style="width:100%">
+<tr>
+<th>Firstname</th>
+<th>Lastname</th>
+<th>Age</th>
+</tr>
+<tr>
+<td>Jill</td>
+<td><font>Smith</font></td>
+<td><b><font>50</font></b></td>
+</tr>
+<tr>
+<td>Eve</td>
+<td>Jackson</td>
+<td>94</td>
+</tr>
+</table>
+
+
+</body>
+</html>`
+
 func Page() string {
 	return page
+}
+
+func Table() string {
+	return table
 }
