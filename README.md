@@ -8,19 +8,10 @@
 
 # activeIncident
 
-## Build with vendor
+## Docker
 ```
-export GO111MODULE=on
-go mod init
-# Below will put all packages in a vendor folder
-go mod vendor
+docker run --rm -it aipiggybot/activeinc
 
-
-
-go test -v -mod=vendor ./...
-
-# Don't forget the "." in "./cmd/script" below
-go build -v -mod=vendor ./...
 ```
 
 
