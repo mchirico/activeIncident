@@ -1,9 +1,11 @@
 package util
 
 import (
+	"encoding/json"
 	"errors"
 	"fmt"
 	"log"
+	"time"
 
 	"golang.org/x/net/html"
 	"io/ioutil"
@@ -80,14 +82,10 @@ func Get(url string) (string, error) {
 	return GetWithClient(url, client)
 }
 
-
 type DB struct {
 	r map[string]string
 	v []string
 }
-
-
-
 
 func Tag(s string) ([]string, []string, error) {
 	doc, err := html.Parse(strings.NewReader(s))
@@ -226,56 +224,108 @@ func GetTableV2(s string) ([]string, error) {
 	return r, nil
 }
 
+func BuildDb() ([]map[string]string, [][]string, error) {
 
-
-func BuildDb() ([]map[string]string,[][]string,error) {
-
-	callTable :=[]map[string]string{}
+	callTable := []map[string]string{}
 	arriveTable := [][]string{}
 
 	url := "https://webapp02.montcopa.org/eoc/cadinfo/livecad.asp"
 	r, err := Get(url)
 	if err != nil {
-		return nil,nil,err
+		return nil, nil, err
 	}
 
 	result, link, err := Tag(r)
 	if err != nil {
-		return nil,nil,err
+		return nil, nil, err
 	}
 
-	for _,result  :=range result {
-		callTable = append(callTable,strip(result))
+	for _, result := range result {
+		callTable = append(callTable, strip(result))
 	}
-
 
 	for _, l := range link {
 		r, err = Get(GetDetail(l))
 		if err != nil {
-			return callTable,nil,err
+			return callTable, nil, err
 		}
 
 		arrive, err := GetTable(r)
 		if err != nil {
-			return callTable,nil,err
+			return callTable, nil, err
 		}
-		arriveTable = append(arriveTable,arrive)
+		arriveTable = append(arriveTable, arrive)
 
 	}
 
-	return callTable, arriveTable,err
+	return callTable, arriveTable, err
 
 }
 
 func Show() {
-	c,a,err := BuildDb()
+	c, a, err := BuildDb()
 	if err != nil {
 		log.Fatalf("No build")
 	}
-	for i,m := range c {
-		for k,v := range m {
-			fmt.Printf("%v: %v\n",k,v)
+	for i, m := range c {
+		for k, v := range m {
+			fmt.Printf("%v: %v\n", k, v)
 		}
-		fmt.Printf("Status: %v\n\n",a[i])
+		fmt.Printf("Status: %v\n\n", a[i])
 	}
+}
+
+func ShowJson() {
+	a, err := GetJson()
+	if err != nil {
+		log.Printf("Error in json")
+	}
+	println(string(a))
+}
+
+
+
+//TODO: Fix me
+func GetJson() ([]byte, error) {
+	c, a, err := BuildDb()
+	if err != nil {
+		log.Fatalf("No build")
+	}
+
+	return ToJson(c, a)
+
+}
+
+func ToJson(call []map[string]string, status [][]string) ([]byte, error) {
+	type Calls struct {
+		Call   map[string]string
+		Status []string
+	}
+
+	calls := []*Calls{}
+
+	if len(status) < len(call) {
+		log.Printf("len(status) < len(call)\n")
+		for i := len(status); i < len(call); i++ {
+			status = append(status, []string{})
+		}
+	}
+
+	for i, v := range call {
+		nt := new(Calls)
+		nt.Call = v
+		nt.Status = status[i]
+		calls = append(calls, nt)
+	}
+
+
+
+	type DB struct {
+		Calls []*Calls
+		TimeStamp time.Time
+	}
+
+
+	return json.Marshal(DB{calls,time.Now()})
+
 }
