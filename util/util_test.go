@@ -1,8 +1,7 @@
 /*
 https://webapp02.montcopa.org/eoc/cadinfo/livecad.asp?print=yes
 
- */
-
+*/
 
 package util
 
@@ -62,20 +61,27 @@ func TestGetTable(t *testing.T) {
 
 func Test_LiveCheck(t *testing.T) {
 
+	defer util.NewTlib().ConstructDir()()
+
 	url := "https://webapp02.montcopa.org/eoc/cadinfo/livecad.asp"
 	r, err := Get(url)
 	if err != nil {
 		t.Fatalf("err: %s\n", err)
 	}
 
+	util.WriteString("mainPage", r, 0644)
+
 	result, link, err := Tag(r)
 	if err != nil {
 		t.FailNow()
 	}
 
+	util.WriteString("mainPage", r, 0644)
+
 	strip(result[0])
 
-	for _, l := range link {
+	for i, l := range link {
+		util.WriteString(fmt.Sprintf("GetDetail%d", i), r, 0644)
 		r, err = Get(GetDetail(l))
 		if err != nil {
 			t.Fatalf("err: %s\n", err)
@@ -88,20 +94,18 @@ func Test_LiveCheck(t *testing.T) {
 
 }
 
-
 func TestGetBuildDB(t *testing.T) {
 
-	c,a,err := BuildDb()
+	c, a, err := BuildDb()
 	if err != nil {
 		t.FailNow()
 	}
-	for i,m := range c {
-		for k,v := range m {
-			fmt.Printf("%v: %v\n",k,v)
+	for i, m := range c {
+		for k, v := range m {
+			fmt.Printf("%v: %v\n", k, v)
 		}
-		fmt.Printf("Status: %v\n\n",a[i])
+		fmt.Printf("Status: %v\n\n", a[i])
 	}
-
 
 }
 
@@ -111,8 +115,17 @@ func TestShow(t *testing.T) {
 
 func TestGetTableV2(t *testing.T) {
 
-	a,_ := GetTableV2(test_fixtures.Detail())
-	for _,v :=range a {
-		fmt.Printf("%v\n",v)
+	a, _ := GetTableV2(test_fixtures.Detail())
+	for _, v := range a {
+		fmt.Printf("%v\n", v)
 	}
+}
+
+func Test_GetJson(t *testing.T) {
+	a, err := GetJson()
+	if err != nil {
+		t.FailNow()
+	}
+	println(string(a))
+
 }

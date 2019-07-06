@@ -24,8 +24,9 @@ import (
 	"fmt"
 	"github.com/mchirico/activeIncident/util"
 	"os"
+	"time"
 
-	homedir "github.com/mitchellh/go-homedir"
+	"github.com/mitchellh/go-homedir"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
@@ -46,7 +47,10 @@ to quickly create a Cobra application.`,
 	// has an action associated with it:
 	RunE: func(cmd *cobra.Command, args []string) error {
 
-		util.Show()
+		for {
+			util.ShowJson()
+			time.Sleep(45 * time.Second)
+		}
 		return nil
 	},
 }
@@ -55,6 +59,7 @@ to quickly create a Cobra application.`,
 // This is called by main.main(). It only needs to happen once to the rootCmd.
 func Execute() {
 	if err := rootCmd.Execute(); err != nil {
+
 		fmt.Printf("... okay here..")
 		fmt.Println(err)
 		os.Exit(1)
