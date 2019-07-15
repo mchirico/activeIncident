@@ -18,6 +18,8 @@ docker  run --rm -it --name activinc -a stdout -a stderr  aipiggybot/activeinc >
 docker  run --rm -it --name activinc  -d  aipiggybot/activeinc
 docker logs  activinc
 
+docker attach activinc
+
 ```
 
 
