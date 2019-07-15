@@ -11,6 +11,7 @@
 ## Docker
 ```
 docker run --rm -it aipiggybot/activeinc
+docker  run --rm -it  -a stdout -a stderr -d  aipiggybot/activeinc > activInc
 
 ```
 
