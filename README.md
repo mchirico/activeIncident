@@ -11,7 +11,12 @@
 ## Docker
 ```
 docker run --rm -it aipiggybot/activeinc
-docker  run --rm -it  -a stdout -a stderr -d  aipiggybot/activeinc > activInc
+
+# For non daemon
+docker  run --rm -it --name activinc -a stdout -a stderr  aipiggybot/activeinc > activInc
+
+docker  run --rm -it --name activinc  -d  aipiggybot/activeinc
+docker logs  activinc
 
 ```
 
