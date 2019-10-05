@@ -127,5 +127,9 @@ func Test_GetJson(t *testing.T) {
 		t.FailNow()
 	}
 	println(string(a))
+}
+
+func Test_WriteJson(t *testing.T) {
+	WriteJson("./testfile")
 
 }
