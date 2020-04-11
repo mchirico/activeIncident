@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"log"
+	"os"
 	"time"
 
 	"golang.org/x/net/html"
@@ -76,10 +77,20 @@ func GetWithClient(url string, client *http.Client) (string, error) {
 	return string(bytes), nil
 }
 
-func Get(url string) (string, error) {
-	// Init a new HTTP client
-	client := &http.Client{}
-	return GetWithClient(url, client)
+type HTTP struct {
+	client *http.Client
+}
+
+func Get(url string, client ...*http.Client) (string, error) {
+
+	var newclient *http.Client
+	if client == nil {
+		newclient = &http.Client{}
+	} else {
+		newclient = client[0]
+	}
+
+	return GetWithClient(url, newclient)
 }
 
 type DB struct {
@@ -283,7 +294,24 @@ func ShowJson() {
 	println(string(a))
 }
 
+func WriteJson(filename string) error {
 
+	f, err := os.OpenFile(filename, os.O_APPEND|os.O_WRONLY|os.O_CREATE, 0600)
+
+	if err != nil {
+		return err
+	}
+	defer f.Close()
+
+	a, err := GetJson()
+	if err != nil {
+		log.Printf("Error in json")
+	}
+	if _, err = f.WriteString(string(a)); err != nil {
+		return err
+	}
+	return nil
+}
 
 //TODO: Fix me
 func GetJson() ([]byte, error) {
@@ -318,14 +346,11 @@ func ToJson(call []map[string]string, status [][]string) ([]byte, error) {
 		calls = append(calls, nt)
 	}
 
-
-
 	type DB struct {
-		Calls []*Calls
+		Calls     []*Calls
 		TimeStamp time.Time
 	}
 
-
-	return json.Marshal(DB{calls,time.Now()})
+	return json.Marshal(DB{calls, time.Now()})
 
 }
