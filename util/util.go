@@ -113,7 +113,7 @@ func Tag(s string) ([]string, []string, error) {
 			for _, a := range n.Attr {
 				if a.Key == "href" {
 
-					if strings.Contains(a.Val, "map.asp?type=") {
+					if strings.Contains(a.Val, "Lookup") {
 						// fmt.Println(a.Val)
 						r = append(r, a.Val)
 					} else if strings.Contains(a.Val, "livecad") {
@@ -242,7 +242,7 @@ func BuildDb() ([]map[string]string, [][]string, error) {
 	callTable := []map[string]string{}
 	arriveTable := [][]string{}
 
-	url := constants.WebCadURL+ "livecad.asp"
+	url := constants.WebCadURL+ "livecad.asp?print=yes"
 	r, err := Get(url)
 	if err != nil {
 		return nil, nil, err
