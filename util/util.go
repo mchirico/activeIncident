@@ -150,6 +150,7 @@ func strip(s string) map[string]string {
 
 func cleanUp(s string) string {
 	s = strings.Replace(s, "livecadcomments-fireems.asp?eid", "eid", -1)
+	s = strings.Replace(s, "livecadcomments.asp?eid", "eid", -1)
 	s = strings.Replace(s, "map.asp?type", "type", -1)
 	s = strings.Replace(s, "<br>", " ", -1)
 	s = strings.Replace(s, " @ ", " ", -1)
@@ -242,7 +243,7 @@ func BuildDb() ([]map[string]string, [][]string, error) {
 	callTable := []map[string]string{}
 	arriveTable := [][]string{}
 
-	url := constants.WebCadURL+ "livecad.asp?print=yes"
+	url := constants.WebCadURL + "livecad.asp?print=yes"
 	r, err := Get(url)
 	if err != nil {
 		return nil, nil, err
