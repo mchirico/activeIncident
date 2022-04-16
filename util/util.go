@@ -8,10 +8,12 @@ import (
 	"os"
 	"time"
 
-	"golang.org/x/net/html"
 	"io/ioutil"
 	"net/http"
 	"strings"
+
+	"github.com/mchirico/activeIncident/constants"
+	"golang.org/x/net/html"
 )
 
 var debug = false
@@ -111,7 +113,7 @@ func Tag(s string) ([]string, []string, error) {
 			for _, a := range n.Attr {
 				if a.Key == "href" {
 
-					if strings.Contains(a.Val, "map.asp?type=") {
+					if strings.Contains(a.Val, "Lookup") {
 						// fmt.Println(a.Val)
 						r = append(r, a.Val)
 					} else if strings.Contains(a.Val, "livecad") {
@@ -148,6 +150,7 @@ func strip(s string) map[string]string {
 
 func cleanUp(s string) string {
 	s = strings.Replace(s, "livecadcomments-fireems.asp?eid", "eid", -1)
+	s = strings.Replace(s, "livecadcomments.asp?eid", "eid", -1)
 	s = strings.Replace(s, "map.asp?type", "type", -1)
 	s = strings.Replace(s, "<br>", " ", -1)
 	s = strings.Replace(s, " @ ", " ", -1)
@@ -155,7 +158,7 @@ func cleanUp(s string) string {
 }
 
 func GetDetail(purl string) string {
-	url := "https://webapp02.montcopa.org/eoc/cadinfo/" + purl
+	url := constants.WebCadURL + purl
 	return strings.Replace(url, " ", "%20", -1)
 }
 
@@ -240,7 +243,7 @@ func BuildDb() ([]map[string]string, [][]string, error) {
 	callTable := []map[string]string{}
 	arriveTable := [][]string{}
 
-	url := "https://webapp02.montcopa.org/eoc/cadinfo/livecad.asp"
+	url := constants.WebCadURL + "livecad.asp?print=yes"
 	r, err := Get(url)
 	if err != nil {
 		return nil, nil, err

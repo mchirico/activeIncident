@@ -1,5 +1,5 @@
 /*
-https://webapp02.montcopa.org/eoc/cadinfo/livecad.asp?print=yes
+https://webapp07.montcopa.org/eoc/cadinfo/livecad.asp?print=yes
 
 */
 
@@ -7,12 +7,14 @@ package util
 
 import (
 	"fmt"
-	test_fixtures "github.com/mchirico/activeIncident/test-fixtures"
-	"github.com/mchirico/tlib/util"
-	"golang.org/x/net/html"
 	"log"
 	"strings"
 	"testing"
+
+	"github.com/mchirico/activeIncident/constants"
+	test_fixtures "github.com/mchirico/activeIncident/test-fixtures"
+	"github.com/mchirico/tlib/util"
+	"golang.org/x/net/html"
 )
 
 func TestBegin(t *testing.T) {
@@ -63,7 +65,7 @@ func Test_LiveCheck(t *testing.T) {
 
 	defer util.NewTlib().ConstructDir()()
 
-	url := "https://webapp02.montcopa.org/eoc/cadinfo/livecad.asp"
+	url := constants.WebCadURL + "livecad.asp?print=yes"
 	r, err := Get(url)
 	if err != nil {
 		t.Fatalf("err: %s\n", err)
