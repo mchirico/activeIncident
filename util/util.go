@@ -8,10 +8,12 @@ import (
 	"os"
 	"time"
 
-	"golang.org/x/net/html"
 	"io/ioutil"
 	"net/http"
 	"strings"
+
+	"github.com/mchirico/activeIncident/constants"
+	"golang.org/x/net/html"
 )
 
 var debug = false
@@ -155,7 +157,7 @@ func cleanUp(s string) string {
 }
 
 func GetDetail(purl string) string {
-	url := "https://webapp02.montcopa.org/eoc/cadinfo/" + purl
+	url := constants.WebCadURL + purl
 	return strings.Replace(url, " ", "%20", -1)
 }
 
@@ -240,7 +242,7 @@ func BuildDb() ([]map[string]string, [][]string, error) {
 	callTable := []map[string]string{}
 	arriveTable := [][]string{}
 
-	url := "https://webapp02.montcopa.org/eoc/cadinfo/livecad.asp"
+	url := constants.WebCadURL+ "livecad.asp"
 	r, err := Get(url)
 	if err != nil {
 		return nil, nil, err
